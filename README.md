@@ -1,0 +1,2 @@
+# Smart-Car-parking-System-with-EV-Charging-System
+The rapid rate of urbanization, coupled with the increasing number of cars, provides major challenges for cities in terms of proper parking facility management. Traditional parking schemes are based on manual approaches, leading to time-wasting inefficiencies, unavailability of correct parking space information, and increased frequency of traffic jams. The increasing uptake of electric cars has also strengthened the demand for advanced infrastructure that supports electric vehicle charging and parking needs.
