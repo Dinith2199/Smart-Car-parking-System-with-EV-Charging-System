@@ -61,15 +61,25 @@
 ##Hardware Components
 
 •Microcontroller → ESP 32 – for sensor control and internet communication
+
 •Ultrasonic Sensors → HC-SR04 – to detect vehicle presence in parking slots
+
 •IR Sensors → Generic IR module – for short-range vehicle detection
+
 •Wireless Charging Pad → Qi Wireless Charger Module – for EV charging
+
 •Relay Module → 5V Relay – to control wireless charger ON/OFF
+
 •Camera Module → Raspberry Pi Camera / USB Webcam – for license plate recognition
+
 •LED Indicators → Red/Green/Blue LEDs – to show slot availability and overtime status
+
 •Servo Motor → SG90 Servo or DC Motor – for gate opening and closing
+
 •Power Supply Unit → 5V/12V Power Adapter – to power components
+
 •Breadboard & Wires → For circuit prototyping and testing
+
 •Frame	Custom design → to simulate or implement real parking slots
 
 ##Software Requirements
