@@ -2,6 +2,7 @@
 •The rapid rate of urbanization, coupled with the increasing number of cars, provides major challenges for cities in terms of proper parking facility management. Traditional parking schemes are based on manual approaches, leading to time-wasting inefficiencies, unavailability of correct parking space information, and increased frequency of traffic jams. The increasing uptake of electric cars has also strengthened the demand for advanced infrastructure that supports electric vehicle charging and parking needs.
 
 ##Description
+
 •This project is a Smart IoT-Based Car Parking System designed to optimize parking space usage and provide a seamless experience for both electric and non-electric vehicle owners. It addresses common urban parking challenges such as slot unavailability, inefficient manual systems, and lack of support for electric vehicle charging.
 
 ##What Problem It Solves
@@ -12,11 +13,17 @@
 - Eliminates manual intervention with automatic gate access and cloud-based data handling
 
 ##How It Works
+
 •Sensors (e.g., ultrasonic) detect vehicle presence in parking slots
+
 •Wireless charging pads activate automatically for EVs based on paid duration
+
 •License plate recognition enables gate automation for registered vehicles
+
 •Real-time data (slot availability, user info, payment status) is synced to the cloud
+
 •A mobile app allows users to register, book slots, make payments, and receive notifications
+
 •Visual indicators (LEDs) display slot status and notify when booking time expires
 
 ##Core Functionalities
