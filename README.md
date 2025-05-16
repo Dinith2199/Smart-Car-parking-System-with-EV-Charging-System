@@ -59,6 +59,7 @@
     •Admin panel to monitor parking usage, revenue, and system performance.
 
 ##Hardware Components
+
 •Microcontroller → ESP 32 – for sensor control and internet communication
 •Ultrasonic Sensors → HC-SR04 – to detect vehicle presence in parking slots
 •IR Sensors → Generic IR module – for short-range vehicle detection
@@ -72,6 +73,7 @@
 •Frame	Custom design → to simulate or implement real parking slots
 
 ##Software Requirements
+
 •Arduino IDE → Writing and uploading code to Arduino
 •C++ → Programming microcontroller and sensor logic
 •Android Studio → Developing the mobile application (for slot booking & payment)
