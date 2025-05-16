@@ -83,19 +83,11 @@
 •Frame	Custom design → to simulate or implement real parking slots
 
 ##Software Requirements
-
-•Arduino IDE → Writing and uploading code to Arduino
-
-•C++ → Programming microcontroller and sensor logic
-
-•Android Studio → Developing the mobile application (for slot booking & payment)
-
-•Firebase → Cloud storage for user, vehicle, and booking data
-
-•OpenCV → License plate recognition and image processing
-
-•HTTP Protocol → Communication between devices and server
-
-•Git & GitHub → Version control and source code management
-
-•Figma → UI/UX designing for the mobile app
+    •Arduino IDE → Writing and uploading code to Arduino
+    •C++ → Programming microcontroller and sensor logic
+    •Android Studio → Developing the mobile application (for slot booking & payment)
+    •Firebase → Cloud storage for user, vehicle, and booking data
+    •OpenCV → License plate recognition and image processing
+    •HTTP Protocol → Communication between devices and server
+    •Git & GitHub → Version control and source code management
+    •Figma → UI/UX designing for the mobile app
