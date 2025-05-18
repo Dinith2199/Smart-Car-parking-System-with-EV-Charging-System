@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:background="#18181A"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Login">
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="200dp"
+        android:src="@drawable/purple_1" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Login Your Account"
+            android:textColor="#F5F3FF"
+            android:gravity="center"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/txtLoginEmail"
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            android:background="@drawable/rounded_corner_input"
+            android:gravity="start|center_vertical"
+            android:layout_marginTop="15dp"
+            android:hint=" Email"
+            android:textSize="15dp"/>
+
+        <EditText
+            android:id="@+id/txtLoginassword"
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            android:background="@drawable/rounded_corner_input"
+            android:layout_marginTop="10dp"
+            android:hint=" Password"
+            android:textSize="15dp"/>
+
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            android:background="@drawable/rounded_button"
+            android:layout_marginTop="20dp"
+            android:text="Login"
+            android:textAllCaps="false"
+            android:textColor="#F5F3FF"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#F5F3FF"
+            android:ravity="end"
+            android:layout_marginTop="10dp"
+            android:text="Froget Password ?"/>
+
+        <TextView
+            android:id="@+id/txtSignin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#F5F3FF"
+            android:text="Don’t have Account?  Signin"
+            android:layout_marginTop="50dp"/>
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

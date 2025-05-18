@@ -13,7 +13,19 @@
         android:theme="@style/Theme.DriveIn"
         tools:targetApi="31">
         <activity
-            android:name=".loading_activity"
+            android:name=".MyVehicles"
+            android:exported="false" />
+        <activity
+            android:name=".Home"
+            android:exported="false" />
+        <activity
+            android:name=".Create_account"
+            android:exported="false" />
+        <activity
+            android:name=".Login"
+            android:exported="false" />
+        <activity
+            android:name=".Loading_activity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
