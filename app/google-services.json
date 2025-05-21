@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "964052264144",
+    "project_id": "drivein-app-84a1a",
+    "storage_bucket": "drivein-app-84a1a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:964052264144:android:3a3f51c62e4ee947b4ead5",
+        "android_client_info": {
+          "package_name": "com.example.drivein"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2VLOA8hYUMOCuvnSf9oZWIcGOHG0LPmM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
