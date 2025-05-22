@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
-    android:background="#18181A"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#18181A"
     android:orientation="vertical"
     tools:context=".Create_account">
 
@@ -19,82 +19,80 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:text="Login Your Account"
             android:textColor="#F5F3FF"
-            android:gravity="center"
             android:textStyle="bold" />
 
         <EditText
             android:id="@+id/txtUsername"
             android:layout_width="300dp"
             android:layout_height="40dp"
+            android:layout_marginTop="15dp"
             android:background="@drawable/rounded_corner_input"
             android:gravity="start|center_vertical"
-            android:layout_marginTop="15dp"
             android:hint=" Username"
-            android:textSize="15dp"/>
+            android:textSize="15dp" />
 
         <EditText
             android:id="@+id/txtEmail"
             android:layout_width="300dp"
             android:layout_height="40dp"
-            android:background="@drawable/rounded_corner_input"
             android:layout_marginTop="10dp"
+            android:background="@drawable/rounded_corner_input"
             android:hint=" Email"
-            android:textSize="15dp"/>
+            android:textSize="15dp" />
 
         <EditText
             android:id="@+id/txtPhonenumber"
             android:layout_width="300dp"
             android:layout_height="40dp"
-            android:background="@drawable/rounded_corner_input"
             android:layout_marginTop="10dp"
+            android:background="@drawable/rounded_corner_input"
             android:hint=" Phonenumber"
-            android:textSize="15dp"/>
+            android:textSize="15dp" />
 
         <EditText
             android:id="@+id/txtPassword"
             android:layout_width="300dp"
             android:layout_height="40dp"
-            android:background="@drawable/rounded_corner_input"
             android:layout_marginTop="10dp"
+            android:background="@drawable/rounded_corner_input"
             android:hint=" Password"
-            android:textSize="15dp"/>
+            android:textSize="15dp" />
 
         <EditText
             android:id="@+id/txtRetypePassword"
             android:layout_width="300dp"
             android:layout_height="40dp"
-            android:background="@drawable/rounded_corner_input"
             android:layout_marginTop="10dp"
+            android:background="@drawable/rounded_corner_input"
             android:hint=" Re-type Password"
-            android:textSize="15dp"/>
+            android:textSize="15dp" />
 
         <Button
             android:id="@+id/btnLogin"
             android:layout_width="300dp"
             android:layout_height="40dp"
-            android:background="@drawable/rounded_button"
             android:layout_marginTop="20dp"
+            android:background="@drawable/rounded_button"
             android:text="Sign up"
             android:textAllCaps="false"
-            android:textColor="#F5F3FF"/>
-
+            android:textColor="#F5F3FF" />
 
         <TextView
             android:id="@+id/txtSignin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#F5F3FF"
+            android:layout_marginTop="50dp"
             android:text="have Account?  Login"
-            android:layout_marginTop="50dp"/>
-
-
+            android:textColor="#F5F3FF" />
+    </LinearLayout>
 
 </LinearLayout>
