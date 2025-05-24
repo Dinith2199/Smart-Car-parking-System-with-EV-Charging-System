@@ -1,104 +1,83 @@
-#include <Arduino.h>
 #include <WiFi.h>
-#include <WiFiClientSecure.h>
-#include <FirebaseClient.h>
+#include <Firebase_ESP_Client.h>
+#include <NewPing.h>
+#include <addons/TokenHelper.h>
 
-// Ultrasonic sensor pins
-#define TRIG_PIN 4 // GPIO4
-#define ECHO_PIN 2 // GPIO2
-
-// Network and Firebase credentials
+// WiFi Credentials
 #define WIFI_SSID "Dinith"
-#define WIFI_PASSWORD "55555555"
-#define WEB_API_KEY "AIzaSyCc_kCcjaUD5fBC3gYZmL1djH76ABk7dXQ"
+#define WIFI_PASSWORD "55555556"
+
+// Firebase Credentials
+#define API_KEY "AIzaSyCc_kCcjaUD5fBC3gYZmL1djH76ABk7dXQ"
 #define DATABASE_URL "https://nodemcu-55278-default-rtdb.asia-southeast1.firebasedatabase.app/"
+
+// Firebase User Email/Password
 #define USER_EMAIL "dinithpalihakkara01@gmail.com"
-#define USER_PASS "Dinith2199"
+#define USER_PASSWORD "Dinith2199"
+
+// Sensor Pins
+#define IR_PIN 15
+#define TRIG_PIN 5
+#define ECHO_PIN 18
+#define MAX_DISTANCE 200
+
+// Initialize ultrasonic sensor
+NewPing sonar(TRIG_PIN, ECHO_PIN, MAX_DISTANCE);
 
 // Firebase objects
-UserAuth user_auth(WEB_API_KEY, USER_EMAIL, USER_PASS);
-FirebaseApp app;
-WiFiClientSecure ssl_client;
-using AsyncClient = AsyncClientClass;
-AsyncClient aClient(ssl_client);
-RealtimeDatabase Database; // Added declaration
-
-// Timer variables
-unsigned long lastSendTime = 0;
-const unsigned long sendInterval = 1000; // Send every 1 second
-
-// Forward declaration of callback
-void processData(AsyncResult &aResult);
+FirebaseData fbdo;
+FirebaseAuth auth;
+FirebaseConfig config;
 
 void setup() {
   Serial.begin(115200);
+  pinMode(IR_PIN, INPUT);
 
-  // Ultrasonic sensor setup
-  pinMode(TRIG_PIN, OUTPUT);
-  pinMode(ECHO_PIN, INPUT);
-
-  // Connect to Wi-Fi
-  Serial.print("Connecting to Wi-Fi");
+  // Connect to WiFi
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  Serial.print("Connecting to WiFi");
   while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
     Serial.print(".");
-    delay(300);
   }
-  Serial.println("\nWi-Fi Connected!");
+  Serial.println("\nWiFi connected");
 
-  // Configure SSL client
-  ssl_client.setInsecure(); // Skip certificate validation
-  ssl_client.setTimeout(1000); // Set connection timeout
+  // Firebase Config
+  config.api_key = API_KEY;
+  config.database_url = DATABASE_URL;
+  auth.user.email = USER_EMAIL;
+  auth.user.password = USER_PASSWORD;
 
-  // Initialize Firebase
-  initializeApp(aClient, app, getAuth(user_auth), processData, "authTask");
-  app.getApp<RealtimeDatabase>(Database);
-  Database.url(DATABASE_URL);
+  // Assign token status callback
+  config.token_status_callback = tokenStatusCallback;
+
+  // Begin Firebase
+  Firebase.begin(&config, &auth);
+  Firebase.reconnectWiFi(true);
+
+  while (!Firebase.ready()) {
+    delay(100);
+    Serial.print("-");
+  }
+  Serial.println("\nFirebase ready");
 }
 
 void loop() {
-  // Maintain authentication and async tasks
-  app.loop();
+  int irValue = digitalRead(IR_PIN);
+  unsigned int distance = sonar.ping_cm();
 
-  // Check if authenticated and ready
-  if (!app.ready()) return;
+  // Prepare JSON
+  FirebaseJson json;
+  json.set("ir", irValue);
+  json.set("distance", distance);
+  json.set("timestamp/.sv", "timestamp");
 
-  // Periodic data sending every 1 second
-  unsigned long currentTime = millis();
-  if (currentTime - lastSendTime >= sendInterval) {
-    // Update last send time
-    lastSendTime = currentTime;
-
-    // Measure distance
-    digitalWrite(TRIG_PIN, LOW);
-    delayMicroseconds(2);
-    digitalWrite(TRIG_PIN, HIGH);
-    delayMicroseconds(10);
-    digitalWrite(TRIG_PIN, LOW);
-
-    long duration = pulseIn(ECHO_PIN, HIGH, 30000);
-    float distance = duration * 0.034 / 2.0;
-
-    if (distance > 0 && distance < 400) {
-      Serial.printf("Distance: %.2f cm\n", distance);
-      Database.set<float>(aClient, "/sensor/distance", distance, processData, "distance");
-    } else {
-      Serial.println("Distance out of range or timeout.");
-    }
+  // Update sensor data
+  if (Firebase.RTDB.setJSON(&fbdo, "/sensor_data/latest", &json)) {
+    Serial.println("Sensor data updated successfully");
+  } else {
+    Serial.printf("Error: %s\n", fbdo.errorReason().c_str());
   }
-}
 
-void processData(AsyncResult &aResult) {
-  if (!aResult.isResult()) return;
-
-  if (aResult.isError()) {
-    Serial.printf("[Error] %s: %s (code %d)\n",
-                  aResult.uid().c_str(),
-                  aResult.error().message().c_str(),
-                  aResult.error().code());
-  } else if (aResult.available()) {
-    Serial.printf("[OK] %s: %s\n",
-                  aResult.uid().c_str(),
-                  aResult.c_str());
-  }
+  delay(1000); Update every 1 seconds
 }
