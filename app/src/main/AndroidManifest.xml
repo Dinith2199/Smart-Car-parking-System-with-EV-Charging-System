@@ -13,10 +13,7 @@
         android:theme="@style/Theme.DriveIn"
         tools:targetApi="31">
         <activity
-
             android:name=".Settings"
-
-            android:name=".Book_Confirmed"
             android:exported="false" />
         <activity
             android:name=".Add_Vehicle_Form"
