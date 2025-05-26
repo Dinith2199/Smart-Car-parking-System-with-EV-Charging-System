@@ -13,6 +13,24 @@
         android:theme="@style/Theme.DriveIn"
         tools:targetApi="31">
         <activity
+            android:name=".Loading_activity2"
+            android:exported="false" />
+        <activity
+            android:name=".Settings"
+            android:exported="false" />
+        <activity
+            android:name=".My_booking"
+            android:exported="false" />
+        <activity
+            android:name=".Book_Confirmed"
+            android:exported="false" />
+        <activity
+            android:name=".New_booking"
+            android:exported="false" />
+        <activity
+            android:name=".Add_Vehicle_Form"
+            android:exported="false" />
+        <activity
             android:name=".MyVehicles"
             android:exported="false" />
         <activity

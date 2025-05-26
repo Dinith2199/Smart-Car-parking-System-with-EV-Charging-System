@@ -5,6 +5,16 @@
       <config />
     </shared>
     <layouts>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_add_vehicle_form.xml">
+        <config>
+          <theme>@style/Theme.DriveIn</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_book_confirmed.xml">
+        <config>
+          <theme>@style/Theme.DriveIn</theme>
+        </config>
+      </layout>
       <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_create_account.xml">
         <config>
           <theme>@style/Theme.DriveIn</theme>
@@ -26,6 +36,26 @@
         </config>
       </layout>
       <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml">
+        <config>
+          <theme>@style/Theme.DriveIn</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_my_booking.xml">
+        <config>
+          <theme>@style/Theme.DriveIn</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_my_vehicles.xml">
+        <config>
+          <theme>@style/Theme.DriveIn</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_new_booking.xml">
+        <config>
+          <theme>@style/Theme.DriveIn</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_settings.xml">
         <config>
           <theme>@style/Theme.DriveIn</theme>
         </config>
@@ -111,6 +141,9 @@
     &quot;accountId&quot;: &quot;31dc2670-b18d-4f50-87a8-c20d2c271995&quot;
   }
 }</component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
 }</component>
@@ -142,7 +175,16 @@
     <key name="android.template.-565944347">
       <recent name="com.example.drivein" />
     </key>
+    <key name="android.template.1617187598">
+      <recent name="com.example.drivein" />
+    </key>
+    <key name="android.template.1650159128">
+      <recent name="com.example.drivein" />
+    </key>
     <key name="android.template.-636137604">
+      <recent name="com.example.drivein" />
+    </key>
+    <key name="android.template.-448812242">
       <recent name="com.example.drivein" />
     </key>
   </component>

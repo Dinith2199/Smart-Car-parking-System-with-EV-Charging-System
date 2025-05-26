@@ -5,9 +5,9 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="#18181A"
-    tools:context=".MyVehicles"
+    android:orientation="vertical"
+    tools:context=".New_booking"
     android:padding="20dp">
 
     <LinearLayout
@@ -54,18 +54,17 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/car2"/>
+                android:src="@drawable/create2"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="My Vehicles"
+                android:text="New Booking"
                 android:textStyle="bold"
                 android:textColor="#F5F3FF"
                 android:gravity="center"
                 android:layout_marginLeft="10dp"
                 android:textSize="20dp"/>
-
 
         </LinearLayout>
 
@@ -75,30 +74,75 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:gravity="end"
-        android:paddingTop="20dp">
+        android:layout_marginTop="20dp"
+        android:background="@drawable/rounded_w_layout"
+        android:padding="20dp">
 
-        <LinearLayout
-            android:id="@+id/btnAddNewVehicle"
-            android:layout_width="wrap_content"
+        <TextView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:text=" Slot"
+            android:paddingTop="10dp"
+            android:textColor="#000"/>
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/plus_math"/>
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:spinnerMode="dropdown"
+            android:background="@drawable/rounded_conner_input_w"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Add New Vehicle"
-                android:textColor="#F5F3FF"
-                android:textSize="15dp"
-                android:layout_marginLeft="5dp"
-                android:gravity="center"/>
-        </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=" Time"
+            android:paddingTop="10dp"
+            android:textColor="#000"/>
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/rounded_conner_input_w"
+            android:spinnerMode="dropdown"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Need Charge"
+            android:paddingTop="10dp"
+            android:textColor="#000"/>
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/rounded_conner_input_w"
+            android:spinnerMode="dropdown"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=" Charging Time"
+            android:paddingTop="10dp"
+            android:textColor="#000"/>
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/rounded_conner_input_w"
+            android:spinnerMode="dropdown"/>
+
+
+        <Button
+            android:id="@+id/btnNewBookingSave"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="Save"
+            android:textColor="#F5F3FF"
+            android:textAllCaps="false"
+            android:background="@drawable/rounded_button"
+            android:layout_marginTop="30dp"/>
 
     </LinearLayout>
+
+
 
 </LinearLayout>

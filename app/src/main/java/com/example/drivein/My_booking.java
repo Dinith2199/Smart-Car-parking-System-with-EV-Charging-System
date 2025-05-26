@@ -7,30 +7,23 @@ import android.widget.LinearLayout;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
-public class MyVehicles extends AppCompatActivity {
+public class My_booking extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_my_vehicles);
+        setContentView(R.layout.activity_my_booking);
 
         navigation();
 
     }
 
     public void navigation(){
-        LinearLayout btnAddNew = findViewById(R.id.btnAddNewVehicle);
-        btnAddNew.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent addNewVehicleIntent = new Intent(getApplicationContext(), Add_Vehicle_Form.class);
-                startActivity(addNewVehicleIntent);
-                finish();
-            }
-        });
-
         LinearLayout btnBack = findViewById(R.id.btnBack);
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override

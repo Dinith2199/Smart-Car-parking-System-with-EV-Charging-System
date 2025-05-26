@@ -9,6 +9,7 @@
     android:orientation="vertical"
     tools:context=".Create_account">
 
+
     <ImageView
         android:layout_width="100dp"
         android:layout_height="100dp"
@@ -88,13 +89,12 @@
 
 
         <TextView
-            android:id="@+id/txtSignin"
+            android:id="@+id/txtLogin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#F5F3FF"
             android:text="have Account?  Login"
             android:layout_marginTop="50dp"/>
 
-
-
+    </LinearLayout>
 </LinearLayout>
