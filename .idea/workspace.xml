@@ -5,6 +5,16 @@
       <config />
     </shared>
     <layouts>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_add_vehicle_form.xml">
+        <config>
+          <theme>@style/Theme.DriveIn</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_book_confirmed.xml">
+        <config>
+          <theme>@style/Theme.DriveIn</theme>
+        </config>
+      </layout>
       <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_create_account.xml">
         <config>
           <theme>@style/Theme.DriveIn</theme>
@@ -30,6 +40,11 @@
           <theme>@style/Theme.DriveIn</theme>
         </config>
       </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_my_vehicles.xml">
+        <config>
+          <theme>@style/Theme.DriveIn</theme>
+        </config>
+      </layout>
     </layouts>
   </component>
   <component name="AutoImportSettings">
@@ -50,7 +65,11 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
+ branch-k
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=LocalEmulator, isTemplate=false, identifier=path=C:\Users\shash\.android\avd\Pixel_2_API_35.avd)]" />
+
   <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=LocalEmulator, isTemplate=false, identifier=path=C:\Users\hansa\.android\avd\Pixel_2_API_35.avd)]" />
+ main
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -98,6 +117,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="resourceFile" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -159,6 +179,9 @@
       <recent name="com.example.drivein" />
     </key>
     <key name="android.template.-636137604">
+      <recent name="com.example.drivein" />
+    </key>
+    <key name="android.template.1491064334">
       <recent name="com.example.drivein" />
     </key>
   </component>
