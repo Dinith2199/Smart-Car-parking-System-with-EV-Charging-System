@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "402095430999",
+    "firebase_url": "https://nodemcu-55278-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "nodemcu-55278",
+    "storage_bucket": "nodemcu-55278.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:402095430999:android:a166dcb5a6737d02aff212",
+        "android_client_info": {
+          "package_name": "com.example.drivein"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAzNvQ-fRwx13SaIaSHN7OAptR8dGK4dbQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

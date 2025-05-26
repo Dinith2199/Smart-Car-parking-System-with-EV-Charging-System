@@ -21,11 +21,11 @@ public class Loading_activity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent loadingINtent2 = new Intent(Loading_activity.this, Login.class);
+                Intent loadingINtent2 = new Intent(Loading_activity.this, Home.class);
                 startActivity(loadingINtent2);
                 finish();
             }
-        },3000);
+        },2000);
 
 
     }

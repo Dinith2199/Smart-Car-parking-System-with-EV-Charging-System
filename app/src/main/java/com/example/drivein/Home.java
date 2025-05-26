@@ -25,44 +25,26 @@ public class Home extends AppCompatActivity {
     }
 
     public void navigation(){
-        LinearLayout btnMyVehicle = findViewById(R.id.btnMyVehicle);
+        LinearLayout btnMyVehicle = findViewById(R.id.btnParking);
         btnMyVehicle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent myVehiclesIntent = new Intent(getApplicationContext(), MyVehicles.class);
+                Intent myVehiclesIntent = new Intent(getApplicationContext(), Parking.class);
                 startActivity(myVehiclesIntent);
                 finish();
             }
         });
 
-        LinearLayout btnNewBooking = findViewById(R.id.btnNewBooking);
+        LinearLayout btnNewBooking = findViewById(R.id.btnParkingHistory);
         btnNewBooking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent newBookingIntent = new Intent(getApplicationContext(), New_booking.class);
+                Intent newBookingIntent = new Intent(getApplicationContext(), ParkingHistory.class);
                 startActivity(newBookingIntent);
                 finish();
             }
         });
 
-        LinearLayout btnMyBooking = findViewById(R.id.btnMyBooking);
-        btnMyBooking.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent myBookingIntent = new Intent(getApplicationContext(), My_booking.class);
-                startActivity(myBookingIntent);
-                finish();
-            }
-        });
 
-        LinearLayout btnSettings = findViewById(R.id.btnSettings);
-        btnSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent settingsIntent = new Intent(getApplicationContext(), Settings.class);
-                startActivity(settingsIntent);
-                finish();
-            }
-        });
     }
 }
