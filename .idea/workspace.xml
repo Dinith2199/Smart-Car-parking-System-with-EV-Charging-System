@@ -55,7 +55,22 @@
           <theme>@style/Theme.DriveIn</theme>
         </config>
       </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_parking.xml">
+        <config>
+          <theme>@style/Theme.DriveIn</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_parking_history.xml">
+        <config>
+          <theme>@style/Theme.DriveIn</theme>
+        </config>
+      </layout>
       <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_settings.xml">
+        <config>
+          <theme>@style/Theme.DriveIn</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/vehicle_enrty.xml">
         <config>
           <theme>@style/Theme.DriveIn</theme>
         </config>
@@ -68,9 +83,6 @@
   <component name="ChangeListManager">
     <list default="true" id="86fbdfb9-1ba9-44b5-84bc-2b4916e5402c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/libs.versions.toml" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/libs.versions.toml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -128,6 +140,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="resourceFile" />
+        <option value="layoutResourceFile" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -178,6 +192,9 @@
       <recent name="com.example.drivein" />
     </key>
     <key name="android.template.-565944347">
+      <recent name="com.example.drivein" />
+    </key>
+    <key name="android.template.1034480728">
       <recent name="com.example.drivein" />
     </key>
     <key name="android.template.1617187598">
