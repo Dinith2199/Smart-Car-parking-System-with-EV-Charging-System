@@ -24,6 +24,16 @@
 #define ECHO_PIN 18
 #define SERVO_PIN 13
 #define MAX_DISTANCE 200
+#define LDR_PIN 36  
+#define LIGHT_PIN 19
+
+// LED Pins for Parking Slots
+const int LED_PINS[4] = {14, 15, 2, 4}; // Parked LEDs: Slot 1-4
+const int FREE_LED_PINS[4] = {12, 16, 17, 25}; // Free LEDs: Slot 1-4
+
+// LDR Thresholds with Hysteresis
+#define LDR_THRESHOLD_ON 3500   // Turn light ON when LDR value > 3500 
+#define LDR_THRESHOLD_OFF 2500  // Turn light OFF when LDR value < 2500
 
 // Timezone settings for Sri Lanka (GMT +5:30)
 #define TIMEZONE_OFFSET 19800  // 5.5 hours in seconds (5*3600 + 30*60)
@@ -32,6 +42,7 @@ const char* ntpServer = "pool.ntp.org";
 // Initialize components
 NewPing sonar(TRIG_PIN, ECHO_PIN, MAX_DISTANCE);
 Servo gateServo;
+LiquidCrystal_I2C lcd(0x27, 16, 2); // Address 0x27, 16x2 LCD
 
 // Firebase objects
 FirebaseData fbdo;
@@ -42,6 +53,13 @@ FirebaseConfig config;
 unsigned long lastSendTime = 0;
 const unsigned long sendInterval = 1000;
 bool gateOpen = false;
+unsigned long welcomeStartTime = 10000;
+bool showWelcome = false;
+bool lightOn = false;  // Track LDR-controlled light status
+bool slotLedStatus[4] = {false, false, false, false}; // Track parked LED status
+bool slotFreeLedStatus[4] = {false, false, false, false}; // Track free LED status
+unsigned long gateOpenStartTime = 0;
+const unsigned long gateOpenDuration = 10000; // Keep gate open for 10 seconds for ultrasonic trigger
 
 // Parking tracking
 struct ParkingRecord {
@@ -71,6 +89,14 @@ void setup() {
     Serial.print(".");
   }
   Serial.println("\nWiFi connected");
+
+  // Configure time with Sri Lanka timezone
+  configTime(TIMEZONE_OFFSET, 0, ntpServer);
+  Serial.println("Waiting for time sync");
+  while (time(nullptr) < 100000) {
+    delay(500);
+    Serial.print(".");
+  }
 
   // Configure time with Sri Lanka timezone
   configTime(TIMEZONE_OFFSET, 0, ntpServer);
@@ -154,17 +180,22 @@ void updateCurrentParkingStatus() {
   }
 }
 
-void addParkingHistory(int slotNumber, time_t startTime, time_t endTime) {
+void addParkingHistory(int slotNumber, time_t startTime, time_t endTime, String plate) {
   String historyPath = "/parking_history/slot" + String(slotNumber) + "/" + String(startTime);
   
   FirebaseJson historyRecord;
   historyRecord.set("start_time", formatDateTime(startTime));
   historyRecord.set("end_time", formatDateTime(endTime));
+  historyRecord.set("number_plate", plate);
   
   time_t duration = endTime - startTime;
   historyRecord.set("duration", formatDuration(duration));
   
-  Firebase.RTDB.set(&fbdo, historyPath, &historyRecord);
+  if (Firebase.RTDB.set(&fbdo, historyPath, &historyRecord)) {
+    Serial.printf("Parking history added for slot %d: Plate %s\n", slotNumber, plate.c_str());
+  } else {
+    Serial.println("Failed to add parking history: " + fbdo.errorReason());
+  }
 }
 
 void loop() {
@@ -182,6 +213,24 @@ void loop() {
     
     unsigned int distance = sonar.ping_cm();
 
+    // Read LDR sensor
+    int ldrValue = analogRead(LDR_PIN);  
+    Serial.print("LDR Value: ");
+    Serial.println(ldrValue);  // Debug LDR value
+
+    // Light control with hysteresis
+    if (ldrValue > LDR_THRESHOLD_ON && !lightOn) {
+      digitalWrite(LIGHT_PIN, HIGH);  // Turn on LDR-controlled light
+      lightOn = true;
+      Firebase.RTDB.setBool(&fbdo, "/light/status", true);
+      Serial.println("Light turned ON (LDR covered, high value)");
+    } else if (ldrValue < LDR_THRESHOLD_OFF && lightOn) {
+      digitalWrite(LIGHT_PIN, LOW);   // Turn off LDR-controlled light
+      lightOn = false;
+      Firebase.RTDB.setBool(&fbdo, "/light/status", false);
+      Serial.println("Light turned OFF (LDR uncovered, low value)");
+    }
+
     // Gate control
     if (!gateOpen && distance > 0 && distance < 10) {
       gateOpen = true;
@@ -196,22 +245,54 @@ void loop() {
     }
 
     // Update parking status
+    // Update parking status and control slot LEDs
     for (int i = 0; i < 4; i++) {
       if (irStatus[i] && !parkingSlots[i].isParked) {
         // Vehicle just parked
         parkingSlots[i].startTime = time(nullptr);
         parkingSlots[i].isParked = true;
-        Serial.printf("Slot %d: Vehicle parked at %s\n", i+1, formatTime(parkingSlots[i].startTime).c_str());
-      } 
-      else if (!irStatus[i] && parkingSlots[i].isParked) {
+        slotLedStatus[i] = true;
+        slotFreeLedStatus[i] = false;
+        digitalWrite(LED_PINS[i], HIGH); // Parked LED ON
+        digitalWrite(FREE_LED_PINS[i], LOW); // Free LED OFF
+        Serial.printf("Slot %d: Vehicle parked at %s, Parked LED ON, Free LED OFF\n", i+1, formatTime(parkingSlots[i].startTime).c_str());
+        
+        // Fetch number plate from Firebase
+        String platePath = "/current_status/slot" + String(i+1) + "/number_plate";
+        if (Firebase.RTDB.getString(&fbdo, platePath)) {
+          parkingSlots[i].plate = fbdo.stringData();
+          Serial.printf("Slot %d: Number plate fetched: %s\n", i+1, parkingSlots[i].plate.c_str());
+        } else {
+          parkingSlots[i].plate = "Unknown";
+          Serial.println("Failed to fetch number plate for slot " + String(i+1) + ": " + fbdo.errorReason());
+        }
+      } else if (!irStatus[i] && parkingSlots[i].isParked) {
         // Vehicle just left
         parkingSlots[i].endTime = time(nullptr);
         parkingSlots[i].isParked = false;
-        Serial.printf("Slot %d: Vehicle left at %s\n", i+1, formatTime(parkingSlots[i].endTime).c_str());
-        
-        // Add to parking history
-        addParkingHistory(i+1, parkingSlots[i].startTime, parkingSlots[i].endTime);
+        slotLedStatus[i] = false;
+        slotFreeLedStatus[i] = true;
+        digitalWrite(LED_PINS[i], LOW); // Parked LED OFF
+        digitalWrite(FREE_LED_PINS[i], HIGH); // Free LED ON
+        Serial.printf("Slot %d: Vehicle left at %s, Parked LED OFF, Free LED ON\n", i+1, formatTime(parkingSlots[i].endTime).c_str());
+        // Add to parking history with number plate
+        addParkingHistory(i+1, parkingSlots[i].startTime, parkingSlots[i].endTime, parkingSlots[i].plate);
+        parkingSlots[i].plate = ""; // Clear plate after recording
+      } else {
+        // Maintain LED states
+        if (parkingSlots[i].isParked) {
+          slotLedStatus[i] = true;
+          slotFreeLedStatus[i] = false;
+          digitalWrite(LED_PINS[i], HIGH); // Parked LED ON
+          digitalWrite(FREE_LED_PINS[i], LOW); // Free LED OFF
+        } else {
+          slotLedStatus[i] = false;
+          slotFreeLedStatus[i] = true;
+          digitalWrite(LED_PINS[i], LOW); // Parked LED OFF
+          digitalWrite(FREE_LED_PINS[i], HIGH); // Free LED ON
+        }
       }
+    }
     }
 
     // Update current status in Firebase
