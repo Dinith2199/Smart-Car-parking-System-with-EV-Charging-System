@@ -4,6 +4,8 @@
 #include <ESP32Servo.h>
 #include <addons/TokenHelper.h>
 #include <time.h>
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
 
 // WiFi Credentials
 #define WIFI_SSID "AndroidAP_202"
@@ -66,19 +68,39 @@ struct ParkingRecord {
   time_t startTime;
   time_t endTime;
   bool isParked;
+  String plate; // Store number plate
 };
 ParkingRecord parkingSlots[4];
 
 void setup() {
   Serial.begin(115200);
 
-  // Initialize sensor and servo pins
-  pinMode(IR1_PIN, INPUT);
-  pinMode(IR2_PIN, INPUT);
-  pinMode(IR3_PIN, INPUT);
-  pinMode(IR4_PIN, INPUT);
+  // Initialize I2C and LCD
+  Wire.begin(SDA_PIN, SCL_PIN);
+  lcd.begin(16, 2);
+  lcd.backlight();
+  lcd.setCursor(0, 0);
+  lcd.print("Welcome to");
+  lcd.setCursor(0, 1);
+  lcd.print("DriveIn Parking");
+  delay(2000);
+  lcd.clear();  
+
+  // Initialize sensor, servo, light, and LED pins
+  pinMode(IR1_PIN, INPUT_PULLUP); 
+  pinMode(IR2_PIN, INPUT_PULLUP);
+  pinMode(IR3_PIN, INPUT_PULLUP);
+  pinMode(IR4_PIN, INPUT_PULLUP);
+  pinMode(LIGHT_PIN, OUTPUT);  
+  digitalWrite(LIGHT_PIN, LOW);   
+  for (int i = 0; i < 4; i++) {
+    pinMode(LED_PINS[i], OUTPUT);
+    pinMode(FREE_LED_PINS[i], OUTPUT);
+    digitalWrite(LED_PINS[i], LOW);
+    digitalWrite(FREE_LED_PINS[i], LOW);
+  }
   gateServo.attach(SERVO_PIN);
-  gateServo.write(0);
+  gateServo.write(0); // Gate closed
   Serial.println("Components initialized");
 
   // Connect to WiFi
@@ -172,10 +194,16 @@ void updateCurrentParkingStatus() {
       Firebase.RTDB.setString(&fbdo, slotPath + "/status", "parked");
       Firebase.RTDB.setString(&fbdo, slotPath + "/start_time", formatTime(parkingSlots[i].startTime));
       Firebase.RTDB.setString(&fbdo, slotPath + "/duration", formatDuration(duration));
+      Firebase.RTDB.setString(&fbdo, slotPath + "/number_plate", parkingSlots[i].plate);
+      Firebase.RTDB.setBool(&fbdo, slotPath + "/led_status", slotLedStatus[i]);
+      Firebase.RTDB.setBool(&fbdo, slotPath + "/free_led_status", slotFreeLedStatus[i]);
     } else {
       Firebase.RTDB.setString(&fbdo, slotPath + "/status", "empty");
       Firebase.RTDB.setString(&fbdo, slotPath + "/start_time", "00:00:00");
       Firebase.RTDB.setString(&fbdo, slotPath + "/duration", "0h 0m 0s");
+      Firebase.RTDB.setString(&fbdo, slotPath + "/number_plate", "");
+      Firebase.RTDB.setBool(&fbdo, slotPath + "/led_status", slotLedStatus[i]);
+      Firebase.RTDB.setBool(&fbdo, slotPath + "/free_led_status", slotFreeLedStatus[i]);
     }
   }
 }
@@ -198,6 +226,33 @@ void addParkingHistory(int slotNumber, time_t startTime, time_t endTime, String 
   }
 }
 
+void updateDisplay() {
+  int availableSlots = 0;
+  for (int i = 0; i < 4; i++) {
+    if (!parkingSlots[i].isParked) availableSlots++;
+  }
+
+  lcd.clear();
+  if (gateOpen && showWelcome && (millis() - welcomeStartTime < 1000)) {
+    lcd.setCursor(0, 0);
+    lcd.print("Welcome!");
+  } else {
+    showWelcome = false;
+    lcd.setCursor(0, 0);
+    if (gateOpen) {
+      if (availableSlots == 0) {
+        lcd.print("Slots Full");
+      } else {
+        lcd.print("Available: ");
+        lcd.print(availableSlots);
+      }
+    } else {
+      lcd.print("Free Slots: ");
+      lcd.print(availableSlots);
+    }
+  }
+}
+
 void loop() {
   unsigned long currentTime = millis();
   if (currentTime - lastSendTime >= sendInterval && Firebase.ready()) {
@@ -213,6 +268,23 @@ void loop() {
     
     unsigned int distance = sonar.ping_cm();
 
+ Dinith2199-patch-1
+        // Update LDR value in Firebase
+    Firebase.RTDB.setInt(&fbdo, "/sensor_data/ldr", ldrValue);
+
+    // Read gate status from Firebase
+    bool firebaseGateStatus = false;
+    if (Firebase.RTDB.getBool(&fbdo, "/gate/status")) {
+      firebaseGateStatus = fbdo.boolData();
+      Serial.printf("Firebase gate status: %s\n", firebaseGateStatus ? "true" : "false");
+    } else {
+      Serial.println("Failed to read gate status: " + fbdo.errorReason());
+    }
+
+    // Gate control: Ultrasonic and Firebase
+    bool ultrasonicOpen = (distance > 0 && distance < 10);
+    if (!gateOpen && (firebaseGateStatus || ultrasonicOpen)) {
+=======
     // Read LDR sensor
     int ldrValue = analogRead(LDR_PIN);  
     Serial.print("LDR Value: ");
@@ -233,15 +305,19 @@ void loop() {
 
     // Gate control
     if (!gateOpen && distance > 0 && distance < 10) {
+main
       gateOpen = true;
-      gateServo.write(90);
+      gateServo.write(90); // Open gate
+      gateOpenStartTime = millis();
+      showWelcome = true;
+      welcomeStartTime = millis();
       Firebase.RTDB.setBool(&fbdo, "/gate/status", true);
-      Serial.println("Gate opened (distance < 10 cm)");
-    } else if (gateOpen && (distance >= 10 || distance == 0)) {
+      Serial.println(ultrasonicOpen ? "Gate opened (Ultrasonic distance < 10 cm)" : "Gate opened (Firebase status: true)");
+    } else if (gateOpen && !firebaseGateStatus && !ultrasonicOpen && (millis() - gateOpenStartTime >= gateOpenDuration)) {
       gateOpen = false;
-      gateServo.write(0);
+      gateServo.write(0);  // Close gate
       Firebase.RTDB.setBool(&fbdo, "/gate/status", false);
-      Serial.println("Gate closed (distance >= 10 cm or invalid)");
+      Serial.println("Gate closed (Firebase: false, Ultrasonic: >= 10 cm or invalid, duration elapsed)");
     }
 
     // Update parking status
