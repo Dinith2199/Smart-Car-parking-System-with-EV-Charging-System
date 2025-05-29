@@ -138,6 +138,32 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="20dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#FFF"
+                android:text="Gate"
+                android:paddingRight="210dp"/>
+
+            <Switch
+                android:id="@+id/btnGate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:padding="20dp"
         android:background="#FFF"
         android:orientation="vertical">
@@ -160,6 +186,7 @@
                    android:textStyle="bold"/>
 
                <TextView
+                   android:id="@+id/txtNumberPlate"
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
                    android:text="No Vehicles"/>
@@ -181,12 +208,22 @@
                    android:paddingLeft="40dp"/>
 
                <Spinner
+                   android:id="@+id/slotSpinner"
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
                    android:paddingLeft="50dp"/>
 
            </LinearLayout>
        </LinearLayout>
+        <Button
+            android:id="@+id/btnConfirmSlot"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Confirm Slot"
+            android:textAllCaps="false"
+            android:background="@drawable/rounded_button"
+            android:layout_marginTop="20dp"
+            android:textColor="#FFF"/>
 
     </LinearLayout>
 

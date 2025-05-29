@@ -83,8 +83,10 @@
   <component name="ChangeListManager">
     <list default="true" id="86fbdfb9-1ba9-44b5-84bc-2b4916e5402c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/drivein/Home.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/drivein/Home.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/drivein/ParkingHistory.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/drivein/ParkingHistory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_home.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_home.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/vehicle_enrty.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/vehicle_enrty.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_parking_history.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_parking_history.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
