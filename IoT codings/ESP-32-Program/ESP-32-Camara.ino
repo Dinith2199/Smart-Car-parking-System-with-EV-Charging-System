@@ -27,24 +27,28 @@
 #define SERVO_PIN 13
 #define MAX_DISTANCE 200
 #define LDR_PIN 36  
-#define LIGHT_PIN 19
+#define LIGHT_PIN 19 
 
 // LED Pins for Parking Slots
 const int LED_PINS[4] = {14, 15, 2, 4}; // Parked LEDs: Slot 1-4
-const int FREE_LED_PINS[4] = {12, 16, 17, 25}; // Free LEDs: Slot 1-4
+const int FREE_LED_PINS[4] = {12, 16, 17, 25}; // Free LEDs: Slot 1-4
+
+// I2C LCD Pins
+#define SDA_PIN 21
+#define SCL_PIN 22
 
 // LDR Thresholds with Hysteresis
 #define LDR_THRESHOLD_ON 3500   // Turn light ON when LDR value > 3500 
-#define LDR_THRESHOLD_OFF 2500  // Turn light OFF when LDR value < 2500
+#define LDR_THRESHOLD_OFF 2500  // Turn light OFF when LDR value < 2500 
 
 // Timezone settings for Sri Lanka (GMT +5:30)
-#define TIMEZONE_OFFSET 19800  // 5.5 hours in seconds (5*3600 + 30*60)
+#define TIMEZONE_OFFSET 19800  
 const char* ntpServer = "pool.ntp.org";
 
 // Initialize components
 NewPing sonar(TRIG_PIN, ECHO_PIN, MAX_DISTANCE);
 Servo gateServo;
-LiquidCrystal_I2C lcd(0x27, 16, 2); // Address 0x27, 16x2 LCD
+LiquidCrystal_I2C lcd(0x27, 16, 2); // Address 0x27, 16x2 LCD
 
 // Firebase objects
 FirebaseData fbdo;
@@ -53,7 +57,7 @@ FirebaseConfig config;
 
 // Timer variables
 unsigned long lastSendTime = 0;
-const unsigned long sendInterval = 1000;
+const unsigned long sendInterval = 1000; // Update every second
 bool gateOpen = false;
 unsigned long welcomeStartTime = 10000;
 bool showWelcome = false;
@@ -61,7 +65,7 @@ bool lightOn = false;  // Track LDR-controlled light status
 bool slotLedStatus[4] = {false, false, false, false}; // Track parked LED status
 bool slotFreeLedStatus[4] = {false, false, false, false}; // Track free LED status
 unsigned long gateOpenStartTime = 0;
-const unsigned long gateOpenDuration = 10000; // Keep gate open for 10 seconds for ultrasonic trigger
+const unsigned long gateOpenDuration = 10000; // Keep gate open for 10 seconds 
 
 // Parking tracking
 struct ParkingRecord {
@@ -84,7 +88,7 @@ void setup() {
   lcd.setCursor(0, 1);
   lcd.print("DriveIn Parking");
   delay(2000);
-  lcd.clear();  
+  lcd.clear();
 
   // Initialize sensor, servo, light, and LED pins
   pinMode(IR1_PIN, INPUT_PULLUP); 
@@ -118,14 +122,6 @@ void setup() {
   while (time(nullptr) < 100000) {
     delay(500);
     Serial.print(".");
-  }
-
-  // Configure time with Sri Lanka timezone
-  configTime(TIMEZONE_OFFSET, 0, ntpServer);
-  Serial.println("Waiting for time sync");
-  while (time(nullptr) < 100000) {
-    delay(500);
-    Serial.print(".");
   }
   Serial.println("\nTime synchronized");
   printLocalTime();
@@ -147,9 +143,11 @@ void setup() {
   }
   Serial.println("\nFirebase ready");
 
-  // Initialize parking slots
+  // Initialize parking slots and set free LEDs ON (all slots empty)
   for (int i = 0; i < 4; i++) {
-    parkingSlots[i] = {0, 0, false};
+    parkingSlots[i] = {0, 0, false, ""};
+    slotFreeLedStatus[i] = true;
+    digitalWrite(FREE_LED_PINS[i], HIGH);
   }
 }
 
@@ -268,8 +266,24 @@ void loop() {
     
     unsigned int distance = sonar.ping_cm();
 
- Dinith2199-patch-1
-        // Update LDR value in Firebase
+    // Read LDR sensor
+    int ldrValue = analogRead(LDR_PIN);  
+    Serial.print("LDR Value: ");
+    Serial.println(ldrValue);  // Debug LDR value
+
+    // Light control with hysteresis
+    if (ldrValue > LDR_THRESHOLD_ON && !lightOn) {
+      digitalWrite(LIGHT_PIN, HIGH);  // Turn on LDR-controlled light
+      lightOn = true;
+      Firebase.RTDB.setBool(&fbdo, "/light/status", true);
+      Serial.println("Light turned ON (LDR covered, high value)");
+    } else if (ldrValue < LDR_THRESHOLD_OFF && lightOn) {
+      digitalWrite(LIGHT_PIN, LOW);   // Turn off LDR-controlled light
+      lightOn = false;
+      Firebase.RTDB.setBool(&fbdo, "/light/status", false);
+      Serial.println("Light turned OFF (LDR uncovered, low value)");
+    }
+    // Update LDR value in Firebase
     Firebase.RTDB.setInt(&fbdo, "/sensor_data/ldr", ldrValue);
 
     // Read gate status from Firebase
@@ -284,28 +298,6 @@ void loop() {
     // Gate control: Ultrasonic and Firebase
     bool ultrasonicOpen = (distance > 0 && distance < 10);
     if (!gateOpen && (firebaseGateStatus || ultrasonicOpen)) {
-=======
-    // Read LDR sensor
-    int ldrValue = analogRead(LDR_PIN);  
-    Serial.print("LDR Value: ");
-    Serial.println(ldrValue);  // Debug LDR value
-
-    // Light control with hysteresis
-    if (ldrValue > LDR_THRESHOLD_ON && !lightOn) {
-      digitalWrite(LIGHT_PIN, HIGH);  // Turn on LDR-controlled light
-      lightOn = true;
-      Firebase.RTDB.setBool(&fbdo, "/light/status", true);
-      Serial.println("Light turned ON (LDR covered, high value)");
-    } else if (ldrValue < LDR_THRESHOLD_OFF && lightOn) {
-      digitalWrite(LIGHT_PIN, LOW);   // Turn off LDR-controlled light
-      lightOn = false;
-      Firebase.RTDB.setBool(&fbdo, "/light/status", false);
-      Serial.println("Light turned OFF (LDR uncovered, low value)");
-    }
-
-    // Gate control
-    if (!gateOpen && distance > 0 && distance < 10) {
-main
       gateOpen = true;
       gateServo.write(90); // Open gate
       gateOpenStartTime = millis();
@@ -320,7 +312,6 @@ main
       Serial.println("Gate closed (Firebase: false, Ultrasonic: >= 10 cm or invalid, duration elapsed)");
     }
 
-    // Update parking status
     // Update parking status and control slot LEDs
     for (int i = 0; i < 4; i++) {
       if (irStatus[i] && !parkingSlots[i].isParked) {
@@ -369,7 +360,6 @@ main
         }
       }
     }
-    }
 
     // Update current status in Firebase
     updateCurrentParkingStatus();
@@ -379,7 +369,10 @@ main
       Firebase.RTDB.setInt(&fbdo, "/sensor_data/distance", distance);
     }
 
+    // Update LCD display
+    updateDisplay();
+
     Serial.println("Data updated successfully");
-    printLocalTime(); // Optional: Print current time for debugging
+    printLocalTime(); // Optional: Print current time 
   }
 }
